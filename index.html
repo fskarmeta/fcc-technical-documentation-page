@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>RuneScape Python Bot Technical Documentation by Fabian Skarmeta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="grid">
+        <div class="index">
+            <nav id="navbar">
+                <header>TruchoBot</header>
+                <ul>
+                    <li><a class="nav-link" href="#Introduction">Introduction</a></li>
+                    <li><a class="nav-link" href="#The_Bot">The Bot</a></li>
+                    <li><a class="nav-link" href="#Dependencies">Dependencies</a></li>
+                    <li><a class="nav-link" href="#Calibration">Calibration</a></li>
+                    <li><a class="nav-link" href="#Running_the_Bot">Running the Bot</a></li>
+                    <li><a class="nav-link" href="#GitHub">GitHub</a></li>
+                </ul>
+            </nav>
+            <p>&copy; Content by <a href="https://github.com/seburrejola" target="_blank">Trucha</a> <br>&copy; Website
+                by <a href="https://github.com/fskarmeta" target="_blank">Bafian</a></p>
+
+        </div>
+        <div class="content">
+
+            <!--MAIN START -->
+
+            <main id="main-doc">
+                <header class="hiddenh">TruchoBot</header>
+                <section class="main-section" id="Introduction">
+                    <header>Introduction</header>
+                    <article>
+                        <p>
+                            In this document we explain the installation process for an experimental bot prototype for
+                            the game
+                            RuneEscape (old version) using Python in Windows. The bot has very limited capabilities for
+                            now but we
+                            want to share
+                            the work that has been begun by Sebastian Urrejola in his spare time.
+                            I asked him for this content because it would be useful for creating this technical
+                            documentation page
+                            with original content for my web development certificate in <a
+                                href=”https://www.freecodecamp.org/ target="_blank">freecodecamp</a>.
+                        </p>
+
+                        <ul>
+                            <li>
+                                It’s of most importance to clarify that the production of this bot is for educational
+                                use only and we
+                                condemn any kind of illicit activities that goes against the game rules. Nevertheless,
+                                how this
+                                information is going to be used will be the responsibility of each individual user.
+                            </li>
+                            <li>
+                                Before we start we will assume that you already know how to download the game and have
+                                the minimum
+                                understanding of how it works and what the goals are. The client we prefer and use is
+                                the one you can
+                                find on <a href=”https://runelite.net/ target="_blank"> runelite.</a>
+
+                            </li>
+                        </ul>
+                        <hr>
+                    </article>
+                </section>
+                <section class="main-section" id="The_Bot">
+                    <header>The Bot</header>
+                    <article>
+                        <ul>
+                            <li>
+                                Detection: The goal of the bot is to detect movement in the game, by looking for change
+                                in pixels on the
+                                game window. To do this, it takes 2 consecutive screenshots of the game so it can
+                                compare them looking
+                                for the regions with differences, then the bot moves the cursor to the center of the
+                                bigger region with
+                                differences and clicks***.
+                            </li>
+                            <li>HP Measure: The bot takes a screenshot of the region where the HP indicator is located
+                                in the game.
+                                (top left side of the minimap). Then the bot takes the RGB information of a section of
+                                the screenshot,
+                                counting the amount of red pixels that passes a certain threshold, so it counts the
+                                amount of pixels in
+                                the game that indicate the amount of HP the user has.
+                            </li>
+                        </ul>
+                        <hr>
+                    </article>
+                </section>
+                <section class="main-section" id="Dependencies">
+                    <header>Dependencies</header>
+                    <article>
+                        <p>
+                            Download the folder <a href="https://github.com/seburrejola/TruchoBot_v0">TruchoBot_v0</a>
+                            that includes the 3 main scripts needed. (HP_detection.py, main_bot.py &
+                            mov_det_screen_v1.py)
+                        </p>
+
+                        <p>
+                            Open the console pressing Windows K +R and running the “cmd” command.
+                        </p>
+                        <p>
+                            Type in “Python” to check if you got it installed, if not, Install Python. With this you
+                            will also get
+                            Python TextEditor called IDLE that you will have to use further aheadF
+                        </p>
+                        <p>
+                            You can always exit from python typing:
+                            <code>exit()</code>
+                        </p>
+                        <p>You will need to install the following 7 packages.
+                            Type in “pip list” to check if you have already installed any of the packages.
+                        </p>
+                        <ul>
+                            <li>Imutils <code>pip install --upgrade imutils</code></li>
+                            <li>cv2<code>pip install opencv-python</code></li>
+                            <li>Numpy<code>pip install numpy</code></li>
+                            <li>PIL (if it doesnt work you can Install
+                                Pillow)<code>pip install PIL</code>or<code>pip install Pillow</code></li>
+                            <li>Scikit-image<code>pip install --upgrade scikit-image</code></li>
+                            <li>Pyautogui<code>pip install pyautogui</code></li>
+                        </ul>
+                        <hr>
+                    </article>
+                </section>
+                <section class="main-section" id="Calibration">
+                    <header>Calibration</header>
+                    <article>
+                        <p>First we need to put the runescape window in a reproducible position, i.e., a place where you
+                            can place
+                            the
+                            window and it will always have the same position.</p>
+                        <p>We recommend you drag the window to the right side of the screen, so it divides the screen in
+                            2 sections.
+                            The left one with the code, and the right one with the game. Something like this</p>
+                        <img src="https://github.com/seburrejola/TruchoBot_v0/blob/master/TruchoBot_v0/console_rune.png?raw=true"
+                            alt="Screen Split of console and game" class="splitimg">
+                        <p>On the top left side of the map in the game, you can see an HP indicator**, we need to get
+                            its location
+                            and size. You could get this info with various methods, a simple method could be taking a
+                            screenshot, then
+                            opening it on paint and measuring the size ( width , height ) of the HP indicator, like this
+                            <br><img
+                                src="https://github.com/seburrejola/TruchoBot_v0/blob/master/TruchoBot_v0/heart_size.jpg?raw=true"
+                                alt="HP Health Hearth icon">.
+                        </p>
+                        <p>With the size of the indicator you can now work on the location, by placing your cursos near
+                            the top left
+                            pixel of the HP indicator you should get an approximate location of the indicator (the pixel
+                            coordinates
+                            should appear in the bottom of the paint window).
+                        </p>
+                        <p>After getting this numbers, let’s call them ( x_aprox , y_aprox ), you will need to run this
+                            line of code
+                            in the IDLE terminal:
+                        </p>
+                        <code>import pyautogui</code>
+                        <code>pyautogui.screenshot(region=( x_aprox , y_aprox , width , height ) ).show() </code>
+                        <p>Is important to note that the width and the height should be the same number. Running the
+                            above line will
+                            open a window with a screenshot, the screenshot top left coordinates are ( x_aprox , y_aprox
+                            ), with a
+                            size ( width , height ). </p>
+                        <p>Now you have to change the “x” and “y” coordinates in order to get a square with the HP
+                            indicator, like
+                            this:</p>
+                        <img src="https://github.com/seburrejola/TruchoBot_v0/blob/master/TruchoBot_v0/corzaronrune.jpg?raw=true"
+                            alt="RuneScape Ingame HP Icon">
+                        <p>When you achieve it, you need to set up the pixels lines in where the HP_detection.py will
+                            check. To do
+                            this, you will need to save the screenshot you took with the python IDLE with this command:
+                        </p>
+                        <code>pyautogui.screenshot(region=( x_topleft , y_topleft , width , height ) ).save(“file_name.jpg”)</code>
+                        <p>Then, open that file with paint and get the locations of these lines (white_green_lines.jpg),
+                            from this
+                            you need the size of the white and green lines.
+                        </p>
+                        <p>The info you collected should be something like this:</p>
+                        <div class="notcode">
+                            Top_white_line = 1x6 → from here you need the height, in this case 6pixels
+                            Mid_white_line = 1x20 → from here you need the height, in this case 20pixels
+                            #Bot_white_line = 1x6
+
+                            Top_green_line = 16x1 → from here you need the width, in this case 16pixels
+                            Mid_green_line = 6x1 → from here you need the width, in this case 6pixels
+                            #Bot_green_line = 16x1
+                        </div>
+                        <p>After getting this info, you will need to change these lines of code in HP_detection.py :</p>
+                        <code>
+                         def main_HP():
+<span style="margin-left:3em">x_ss = 1735 - 91 	→  your x_topleft</span> 
+	<span style="margin-left:3em">y_ss = 82 + 21 	→  your y_topleft</span> 
+	<span style="margin-left:3em">w_ss = 33 		→  your width </span>
+	<span style="margin-left:3em">h_ss = 33		→  your height </span>
+	<span style="margin-left:3em">coord_img = [ ]</span>
+<span style="margin-left:3em">top_white_line = 6   	→ your number</span>
+	<span style="margin-left:3em">mid_white_line = 20    → your number</span>
+	<span style="margin-left:3em">top_green_line = 16    → your number</span>
+ <span style="margin-left:3em">mid_green_line = 6     → your number</span>
+                       
+
+                        </code>
+                        <p>After this, the HP_detection.py should work well, then you need to change one more thing, but
+                            now in the
+                            main_bot.py code.</p>
+                        <p>Using the IDLE console you opened earlier, run the line</p>
+                        <code>pyautogui.getAllTitles()</code>
+                        <p>This will return a list with all the titles of the windows you have running. Search on this
+                            list for the
+                            one that corresponds to your runescape window, in my cases it is “Old School RuneScape”
+                        </p>
+                        <p>After you get the title, go to the code named main_bot.py, open it with IDLE, go to the line
+                            21, and and
+                            change it to what you obtained in the previous step, something like this:</p>
+                        <code>win_index = pyautogui.getAllTitles().index(“TITLE OF YOUR RUNESCAPE WINDOW”')</code>
+                        <p>Once you have done all this hard work, the code should be ready to run.S</p>
+                        <hr>
+                    </article>
+                </section>
+                <section class="main-section" id="Running_the_Bot">
+                    <header>Running the Bot</header>
+                    <p>
+                        Open the command prompt and navigate to the folder where you have the codes, as an example, if
+                        you have the
+                        folder in your desktop, you should run the command:
+                    </p>
+                    <code>cd Desktop/TruchoBot_v0</code>
+                    <p>Then take the command prompt window and drag it to the left, dividing your screen into the
+                        terminal and the
+                        game, like we saw before.</p>
+                    <p>
+                        Then run the codes in the command prompt, like this:
+                    </p>
+                    <code>main_bot.py</code>
+                    <code>python main_bot.py</code>
+                    <p>The code should start running. If it is running, you should see informacion about your HP and
+                        what the code
+                        is doing.</p>
+                    <p>To shutdown the bot, in other words, stop running the main_bot.py you have two options:</´>
+                    <ol>
+                        <li>You can click on the terminal and press “ ctrl + C ”.</li>
+
+                        <li>You can move your cursor to the top left position of your screen and wait a few seconds, it
+                            should stop. If it doesn’t stop, go with option (1).</li>
+                    </ol>
+
+                </section>
+                <section class="main-section" id="GitHub">
+                    <header>GitHub</header>
+                    <article>
+                        <p>
+                            We opened a public repository for this project on <a
+                                href="https://github.com/seburrejola/TruchoBot_v0" target="_blank">GitHub</a>, feel free
+                            to create a branch and work on
+                            expanding the capabilities of this Bot, explain to others how to integrate your new features
+                            by modifying
+                            this html also and creating a pull request.
+                        </p>
+                    </article>
+                </section>
+                <footer>
+                    &copy; Content by <a href="https://github.com/seburrejola" target="_blank">Trucha</a> <br>&copy;
+                    Website by <a href="https://github.com/fskarmeta" target="_blank">Bafian</a>
+                </footer>
+        </div>
+    </div>
+    </main>
+</body>
